@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>공연/행사 목록</title>
+</head>
+<body>
+    <h1>공연/행사 목록</h1>
+    <p>Event 테이블에서 불러온 데이터 50개 제공.</p>
+
+    <ul>
+        {% for e in events %}
+            <li>
+                <strong>{{ e["event_name"] }}</strong><br>
+                날짜: {{ e["start_date"] }} ~ {{ e["end_date"] }}<br>
+                지역: {{ e["region"] }} / 장소: {{ e["place"] }}
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+</body>
+</html>
