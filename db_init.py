@@ -23,10 +23,31 @@ def create_tables():
         );
     """)
 
+    # 사용자 정보
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS User (
+            user_id     INTEGER PRIMARY KEY AUTOINCREMENT,
+            username    TEXT NOT NULL,
+            email       TEXT UNIQUE,
+            password    TEXT
+        );
+    """)
+
+    # 찜 목록 (User - Event 연결)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS Wishlist (
+            user_id     INTEGER NOT NULL,
+            event_id    INTEGER NOT NULL,
+            PRIMARY KEY (user_id, event_id),
+            FOREIGN KEY (user_id) REFERENCES User(user_id),
+            FOREIGN KEY (event_id) REFERENCES Event(event_id)
+        );
+    """)
+
     conn.commit()
     conn.close()
 
 
 if __name__ == "__main__":
     create_tables()
-    print("Event 테이블 생성 완료")
+    print("테이블 생성 완료")
