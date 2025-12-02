@@ -12,6 +12,11 @@ def get_connection():
     return conn
 
 
+def get_current_user_id():
+    # 로그인 기능 대신, 임시로 user_id=1 고정
+    return 1
+
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -96,6 +101,28 @@ def event_detail(event_id):
         return "해당 공연을 찾을 수 없습니다.", 404
 
     return render_template("event_detail.html", event=event)
+
+
+@app.route("/wishlist")
+def wishlist():
+    user_id = get_current_user_id()
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT e.event_id, e.event_name, e.start_date, e.end_date,
+               e.region, e.place
+        FROM Wishlist w
+        JOIN Event e ON w.event_id = e.event_id
+        WHERE w.user_id = ?
+        ORDER BY e.start_date
+    """, (user_id,))
+    rows = cur.fetchall()
+
+    conn.close()
+
+    return render_template("wishlist.html", events=rows)
 
 
 if __name__ == "__main__":

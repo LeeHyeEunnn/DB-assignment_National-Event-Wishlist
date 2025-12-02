@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>내 찜 목록</title>
+</head>
+<body>
+    <h1>내 찜 목록</h1>
+
+    <p>
+        <a href="/events">← 공연 검색하기</a>
+    </p>
+
+    <hr>
+
+    {% if events %}
+        <ul>
+            {% for e in events %}
+                <li>
+                    <strong>
+                        <a href="/events/{{ e['event_id'] }}">
+                            {{ e["event_name"] }}
+                        </a>
+                    </strong><br>
+                    날짜: {{ e["start_date"] }} ~ {{ e["end_date"] }}<br>
+                    지역: {{ e["region"] }} / 장소: {{ e["place"] }}
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>아직 찜한 공연이 없습니다.</p>
+    {% endif %}
+</body>
+</html>
