@@ -7,7 +7,7 @@
 <body>
     <h1>공연/행사 목록</h1>
 
-    <!-- 🔍 검색 폼 (기간 + 지역) -->
+    <!-- 검색 폼 (기간 + 지역) -->
     <form method="get" action="/events">
     <label>
         시작일:
@@ -36,7 +36,11 @@
 <ul>
     {% for e in events %}
         <li>
-            <strong>{{ e["event_name"] }}</strong><br>
+            <strong>
+                <a href="/events/{{ e['event_id'] }}">
+                    {{ e["event_name"] }}
+                </a>
+            </strong><br>
             날짜: {{ e["start_date"] }} ~ {{ e["end_date"] }}<br>
             지역: {{ e["region"] }} / 장소: {{ e["place"] }}
         </li>

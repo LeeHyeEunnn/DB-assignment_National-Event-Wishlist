@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request   # ← request 추가
+from flask import Flask, render_template, request
 import sqlite3
 
 app = Flask(__name__)
@@ -75,6 +75,27 @@ def events():
         region=region,
         regions=regions,
     )
+
+
+@app.route("/events/<int:event_id>")
+def event_detail(event_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT event_id, event_name, start_date, end_date, region, place,
+               category, host, fee, homepage
+        FROM Event
+        WHERE event_id = ?
+    """, (event_id,))
+    event = cur.fetchone()
+
+    conn.close()
+
+    if event is None:
+        return "해당 공연을 찾을 수 없습니다.", 404
+
+    return render_template("event_detail.html", event=event)
 
 
 if __name__ == "__main__":

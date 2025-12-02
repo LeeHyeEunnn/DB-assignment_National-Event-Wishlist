@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>{{ event["event_name"] }} - 공연 상세</title>
+</head>
+<body>
+    <h1>{{ event["event_name"] }}</h1>
+
+    <p>
+        <strong>기간:</strong>
+        {{ event["start_date"] }} ~ {{ event["end_date"] }}
+    </p>
+
+    <p>
+        <strong>지역 / 장소:</strong>
+        {{ event["region"] }} / {{ event["place"] }}
+    </p>
+
+    <p>
+        <strong>주최/주관:</strong>
+        {{ event["host"] }}
+    </p>
+
+    <p>
+        <strong>요금 정보:</strong>
+        {{ event["fee"] }}
+    </p>
+
+    {% if event["homepage"] %}
+        <p>
+            <strong>홈페이지:</strong>
+            <a href="{{ event["homepage"] }}" target="_blank">
+                {{ event["homepage"] }}
+            </a>
+        </p>
+    {% endif %}
+
+    <hr>
+
+    <p>
+        <a href="/events">← 공연 목록으로 돌아가기</a>
+    </p>
+</body>
+</html>
