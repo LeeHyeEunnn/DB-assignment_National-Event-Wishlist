@@ -6,17 +6,42 @@
 </head>
 <body>
     <h1>공연/행사 목록</h1>
-    <p>Event 테이블에서 불러온 데이터 50개 제공.</p>
 
-    <ul>
-        {% for e in events %}
-            <li>
-                <strong>{{ e["event_name"] }}</strong><br>
-                날짜: {{ e["start_date"] }} ~ {{ e["end_date"] }}<br>
-                지역: {{ e["region"] }} / 장소: {{ e["place"] }}
-            </li>
-            <hr>
-        {% endfor %}
-    </ul>
+    <!-- 🔍 검색 폼 (기간 + 지역) -->
+    <form method="get" action="/events">
+    <label>
+        시작일:
+        <input type="date" name="start_date" value="{{ start_date }}">
+    </label>
+    <label>
+        종료일:
+        <input type="date" name="end_date" value="{{ end_date }}">
+    </label>
+    <label>
+        지역:
+        <select name="region">
+            <option value="">전체</option>
+            {% for r in regions %}
+                <option value="{{ r }}" {% if r == region %}selected{% endif %}>
+                    {{ r }}
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+    <button type="submit">검색</button>
+</form>
+
+<hr>
+
+<ul>
+    {% for e in events %}
+        <li>
+            <strong>{{ e["event_name"] }}</strong><br>
+            날짜: {{ e["start_date"] }} ~ {{ e["end_date"] }}<br>
+            지역: {{ e["region"] }} / 장소: {{ e["place"] }}
+        </li>
+        <hr>
+    {% endfor %}
+</ul>
 </body>
 </html>
