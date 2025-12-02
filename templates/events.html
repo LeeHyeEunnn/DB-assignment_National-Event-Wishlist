@@ -33,19 +33,40 @@
 
 <hr>
 
-<ul>
-    {% for e in events %}
-        <li>
-            <strong>
-                <a href="/events/{{ e['event_id'] }}">
-                    {{ e["event_name"] }}
-                </a>
-            </strong><br>
-            날짜: {{ e["start_date"] }} ~ {{ e["end_date"] }}<br>
-            지역: {{ e["region"] }} / 장소: {{ e["place"] }}
-        </li>
-        <hr>
-    {% endfor %}
-</ul>
+{% if result_count is not none %}
+    <p>검색 결과: {{ result_count }}건</p>
+{% endif %}
+
+{% if events %}
+    <ul>
+        {% for e in events %}
+            <li>
+                <strong>
+                    <a href="/events/{{ e['event_id'] }}">
+                        {{ e["event_name"] }}
+                    </a>
+                </strong><br>
+                날짜: {{ e["start_date"] }} ~ {{ e["end_date"] }}<br>
+                지역: {{ e["region"] }} / 장소: {{ e["place"] }}<br>
+
+                {% if e["is_favorite"] == 'Y' %}
+                    <a href="/wishlist/remove/{{ e['event_id'] }}">
+                        ❤️
+                    </a>
+                {% else %}
+                    <a href="/wishlist/add/{{ e['event_id'] }}">
+                        🤍
+                    </a>
+                {% endif %}
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>조건에 맞는 공연이 없습니다.</p>
+{% endif %}
+
+
+
 </body>
 </html>

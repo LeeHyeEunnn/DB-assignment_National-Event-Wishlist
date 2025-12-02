@@ -33,7 +33,7 @@ def events():
     conn = get_connection()
     cur = conn.cursor()
 
-    # 지역 목록 (드롭다운용)
+    # 지역 목록
     cur.execute("""
         SELECT DISTINCT region
         FROM Event
@@ -43,7 +43,7 @@ def events():
     region_rows = cur.fetchall()
     regions = [row[0] for row in region_rows]
 
-    # 기본 쿼리 + 조건 붙이기 (Wishlist와 LEFT JOIN)
+    # 이벤트 + 찜 여부
     sql = """
         SELECT
             e.event_id,
@@ -59,10 +59,9 @@ def events():
         FROM Event e
         LEFT JOIN Wishlist w
             ON e.event_id = w.event_id
-        AND w.user_id = ?
+           AND w.user_id = ?
         WHERE 1=1
     """
-
     params = [user_id]
 
     if start_date:
@@ -83,7 +82,8 @@ def events():
     rows = cur.fetchall()
     conn.close()
 
-    print("검색 조건:", start_date, end_date, region, "→ 개수:", len(rows))
+    result_count = len(rows)
+    print("검색 조건:", start_date, end_date, region, "→ 개수:", result_count)
 
     return render_template(
         "events.html",
@@ -92,6 +92,7 @@ def events():
         end_date=end_date,
         region=region,
         regions=regions,
+        result_count=result_count,
     )
 
 
