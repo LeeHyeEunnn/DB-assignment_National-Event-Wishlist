@@ -17,35 +17,50 @@
         {{ event["region"] }} / {{ event["place"] }}
     </p>
 
+    {% if event["host"] %}
     <p>
         <strong>주최/주관:</strong>
         {{ event["host"] }}
     </p>
+    {% endif %}
 
+    {% if event["fee"] %}
     <p>
         <strong>요금 정보:</strong>
         {{ event["fee"] }}
     </p>
-
-    {% if event["homepage"] %}
-        <p>
-            <strong>홈페이지:</strong>
-            <a href="{{ event["homepage"] }}" target="_blank">
-                {{ event["homepage"] }}
-            </a>
-        </p>
     {% endif %}
 
+    {% if event["homepage"] %}
     <p>
-        <a href="/wishlist/add/{{ event['event_id'] }}">
-            ❤️ 찜하기
+        <strong>홈페이지:</strong>
+        <a href="{{ event['homepage'] }}" target="_blank">
+            {{ event["homepage"] }}
         </a>
     </p>
+    {% endif %}
+
+    {% if event["is_favorite"] == 'Y' %}
+    <p>
+        <a href="/wishlist/remove/{{ event['event_id'] }}">
+            ❤️
+        </a>
+    </p>
+    {% else %}
+    <p>
+        <a href="/wishlist/add/{{ event['event_id'] }}">
+            🤍
+        </a>
+    </p>
+    {% endif %}
 
     <hr>
 
     <p>
         <a href="/events">← 공연 목록으로 돌아가기</a>
+    </p>
+    <p>
+        <a href="/wishlist">내 찜 목록 보기</a>
     </p>
 </body>
 </html>

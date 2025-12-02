@@ -24,6 +24,8 @@ def home():
 
 @app.route("/events")
 def events():
+    user_id = get_current_user_id()
+
     start_date = request.args.get("start_date", "").strip()
     end_date = request.args.get("end_date", "").strip()
     region = request.args.get("region", "").strip()
@@ -41,30 +43,41 @@ def events():
     region_rows = cur.fetchall()
     regions = [row[0] for row in region_rows]
 
-    # 기본 쿼리
+    # 기본 쿼리 + 조건 붙이기 (Wishlist와 LEFT JOIN)
     sql = """
-        SELECT event_id, event_name, start_date, end_date, region, place
-        FROM Event
+        SELECT
+            e.event_id,
+            e.event_name,
+            e.start_date,
+            e.end_date,
+            e.region,
+            e.place,
+            CASE
+                WHEN w.user_id IS NULL THEN 'N'
+                ELSE 'Y'
+            END AS is_favorite
+        FROM Event e
+        LEFT JOIN Wishlist w
+            ON e.event_id = w.event_id
+        AND w.user_id = ?
         WHERE 1=1
     """
-    params = []
 
-    # 날짜 필터
+    params = [user_id]
+
     if start_date:
-        sql += " AND start_date >= ?"
+        sql += " AND e.start_date >= ?"
         params.append(start_date)
 
     if end_date:
-        sql += " AND end_date <= ?"
+        sql += " AND e.end_date <= ?"
         params.append(end_date)
 
-    # 지역 필터
     if region:
-        sql += " AND region = ?"
+        sql += " AND e.region = ?"
         params.append(region)
 
-    # 정렬 + 개수 제한
-    sql += " ORDER BY start_date LIMIT 100"
+    sql += " ORDER BY e.start_date LIMIT 100"
 
     cur.execute(sql, params)
     rows = cur.fetchall()
@@ -82,17 +95,27 @@ def events():
     )
 
 
+
 @app.route("/events/<int:event_id>")
 def event_detail(event_id):
+    user_id = get_current_user_id()
+
     conn = get_connection()
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT event_id, event_name, start_date, end_date, region, place,
-               category, host, fee, homepage
-        FROM Event
-        WHERE event_id = ?
-    """, (event_id,))
+        SELECT
+            e.*,
+            CASE
+                WHEN w.user_id IS NULL THEN 'N'
+                ELSE 'Y'
+            END AS is_favorite
+        FROM Event e
+        LEFT JOIN Wishlist w
+            ON e.event_id = w.event_id
+           AND w.user_id = ?
+        WHERE e.event_id = ?
+    """, (user_id, event_id))
     event = cur.fetchone()
 
     conn.close()
@@ -101,6 +124,7 @@ def event_detail(event_id):
         return "해당 공연을 찾을 수 없습니다.", 404
 
     return render_template("event_detail.html", event=event)
+
 
 
 @app.route("/wishlist")
@@ -131,8 +155,6 @@ def add_wishlist(event_id):
 
     conn = get_connection()
     cur = conn.cursor()
-
-    # 중복해서 눌러도 에러 안 나게 INSERT OR IGNORE
     cur.execute(
         "INSERT OR IGNORE INTO Wishlist (user_id, event_id) VALUES (?, ?)",
         (user_id, event_id),
@@ -140,8 +162,8 @@ def add_wishlist(event_id):
     conn.commit()
     conn.close()
 
-    # 다시 공연 상세 페이지로 돌아가기
-    return redirect(f"/events/{event_id}")
+    next_url = request.referrer or f"/events/{event_id}"
+    return redirect(next_url)
 
 
 @app.route("/wishlist/remove/<int:event_id>")
@@ -150,7 +172,6 @@ def remove_wishlist(event_id):
 
     conn = get_connection()
     cur = conn.cursor()
-
     cur.execute(
         "DELETE FROM Wishlist WHERE user_id = ? AND event_id = ?",
         (user_id, event_id),
@@ -158,8 +179,9 @@ def remove_wishlist(event_id):
     conn.commit()
     conn.close()
 
-    # 찜 목록에서 삭제했으면 다시 찜 목록으로
-    return redirect("/wishlist")
+    next_url = request.referrer or "/wishlist"
+    return redirect(next_url)
+
 
 
 
