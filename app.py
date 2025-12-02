@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import sqlite3
 
 app = Flask(__name__)
@@ -123,6 +123,44 @@ def wishlist():
     conn.close()
 
     return render_template("wishlist.html", events=rows)
+
+
+@app.route("/wishlist/add/<int:event_id>")
+def add_wishlist(event_id):
+    user_id = get_current_user_id()
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    # 중복해서 눌러도 에러 안 나게 INSERT OR IGNORE
+    cur.execute(
+        "INSERT OR IGNORE INTO Wishlist (user_id, event_id) VALUES (?, ?)",
+        (user_id, event_id),
+    )
+    conn.commit()
+    conn.close()
+
+    # 다시 공연 상세 페이지로 돌아가기
+    return redirect(f"/events/{event_id}")
+
+
+@app.route("/wishlist/remove/<int:event_id>")
+def remove_wishlist(event_id):
+    user_id = get_current_user_id()
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "DELETE FROM Wishlist WHERE user_id = ? AND event_id = ?",
+        (user_id, event_id),
+    )
+    conn.commit()
+    conn.close()
+
+    # 찜 목록에서 삭제했으면 다시 찜 목록으로
+    return redirect("/wishlist")
+
 
 
 if __name__ == "__main__":

@@ -23,7 +23,10 @@
                         </a>
                     </strong><br>
                     날짜: {{ e["start_date"] }} ~ {{ e["end_date"] }}<br>
-                    지역: {{ e["region"] }} / 장소: {{ e["place"] }}
+                    지역: {{ e["region"] }} / 장소: {{ e["place"] }}<br>
+                    <a href="/wishlist/remove/{{ e['event_id'] }}">
+                        🤍 찜 해제
+                    </a>
                 </li>
                 <hr>
             {% endfor %}
