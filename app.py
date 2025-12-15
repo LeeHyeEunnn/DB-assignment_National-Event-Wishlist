@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, make_response
 import sqlite3
 
 app = Flask(__name__)
@@ -95,6 +95,21 @@ def events():
         regions=regions,
         result_count=result_count,
     )
+    html = render_template(
+        "events.html",
+        events=rows,
+        start_date=start_date,
+        end_date=end_date,
+        region=region,
+        regions=regions,
+        result_count=len(rows),
+    )
+
+    response = make_response(html)
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 
 
