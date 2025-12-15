@@ -12,37 +12,31 @@
             <nav class="top-nav">
                 <a href="{{ url_for('home') }}" class="btn btn-primary">홈으로</a>
                 <a href="{{ url_for('wishlist') }}" class="btn btn-primary">내 위시리스트</a>
-                <a href="{{ url_for('events') }}">공연/행사 목록</a>
+                <a href="{{ url_for('events') }}" class="btn btn-primary">공연/행사 목록</a>
             </nav>
 
             <dl class="detail-info">
                 <div class="detail-info-row">
-                    <dt>기간</dt>
-                    <dd>{{ event["start_date"] }} ~ {{ event["end_date"] }}</dd>
+                    <dt>기간 : {{ event["start_date"] }} ~ {{ event["end_date"] }}</dt>
                 </div>
                 <div class="detail-info-row">
-                    <dt>지역 / 장소</dt>
-                    <dd>{{ event["region"] }} / {{ event["place"] }}</dd>
+                    <dt>지역 / 장소 : {{ event["region"] }} / {{ event["place"] }}</dt>
                 </div>
                 <div class="detail-info-row">
-                    <dt>주최/주관</dt>
-                    <dd>{{ event["host"] }}</dd>
+                    <dt>주최/주관 : {{ event["host"] }}</dt>
                 </div>
                 <div class="detail-info-row">
-                    <dt>요금 정보</dt>
-                    <dd>{{ event["fee_info"] }}</dd>
+                    <dt>요금 정보 : {{ event["fee_info"] }}</dt>
                 </div>
                 <div class="detail-info-row">
-                    <dt>홈페이지</dt>
-                    <dd>
-                        {% if event["homepage"] %}
+                    <dt>홈페이지 : {% if event["homepage"] %}
                             <a href="{{ event['homepage'] }}" target="_blank">
                                 {{ event["homepage"] }}
                             </a>
                         {% else %}
                             정보 없음
                         {% endif %}
-                    </dd>
+                    </dt>
                 </div>
             </dl>
 
@@ -55,15 +49,6 @@
                        class="heart-link">🤍 </a>
                 {% endif %}
             </p>
-
-            <div class="detail-links">
-                <a href="{{ url_for('events') }}" class="btn btn-outline">
-                    ← 공연 목록으로 돌아가기
-                </a>
-                <a href="{{ url_for('wishlist') }}" class="btn btn-outline">
-                    내 찜 목록 보기
-                </a>
-            </div>
         </div>
     </div>
 </body>
