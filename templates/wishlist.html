@@ -2,37 +2,45 @@
 <html lang="ko">
 <head>
     <meta charset="utf-8">
-    <title>내 찜 목록</title>
+    <title>내 위시리스트</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>내 찜 목록</h1>
+    <div class="main-wrapper">
+        <div class="page-box">
+            <h2>내 위시리스트</h2>
+            <nav class="top-nav">
+                <a href="{{ url_for('home') }}" class="btn btn-primary">홈으로</a>
+                <a href="{{ url_for('events') }}" class="btn btn-primary">공연/행사 목록</a>
+            </nav>
 
-    <p>
-        <a href="/events">← 공연 검색하기</a>
-    </p>
-
-    <hr>
-
-    {% if events %}
-        <ul>
-            {% for e in events %}
-                <li>
-                    <strong>
-                        <a href="/events/{{ e['event_id'] }}">
-                            {{ e["event_name"] }}
-                        </a>
-                    </strong><br>
-                    날짜: {{ e["start_date"] }} ~ {{ e["end_date"] }}<br>
-                    지역: {{ e["region"] }} / 장소: {{ e["place"] }}<br>
-                    <a href="/wishlist/remove/{{ e['event_id'] }}">
-                        🤍
+            {% if events %}
+                <ul class="event-list">
+                    {% for e in events %}
+                        <li class="event-item">
+                            <span class="event-name">
+                                <a href="{{ url_for('event_detail', event_id=e['event_id']) }}">
+                                    {{ e["event_name"] }}
+                                </a>
+                            </span><br>
+                            <span class="event-meta">
+                                {{ e["start_date"] }} ~ {{ e["end_date"] }} |
+                                {{ e["region"] }} / {{ e["place"] }}
+                            </span>
+                            <a href="{{ url_for('remove_wishlist', event_id=e['event_id']) }}"
+                               class="heart-link">❤️</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="notice">아직 찜한 공연이 없습니다.</p>
+                <p>
+                    <a href="{{ url_for('events') }}" class="btn btn-primary">
+                        공연 둘러보러 가기
                     </a>
-                </li>
-                <hr>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>아직 찜한 공연이 없습니다.</p>
-    {% endif %}
+                </p>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>

@@ -2,65 +2,69 @@
 <html lang="ko">
 <head>
     <meta charset="utf-8">
-    <title>{{ event["event_name"] }} - 공연 상세</title>
+    <title>{{ event["event_name"] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>{{ event["event_name"] }}</h1>
+    <div class="main-wrapper">
+        <div class="page-box">
+            <h2 class="detail-title">{{ event["event_name"] }}</h2>
+            <nav class="top-nav">
+                <a href="{{ url_for('home') }}" class="btn btn-primary">홈으로</a>
+                <a href="{{ url_for('wishlist') }}" class="btn btn-primary">내 위시리스트</a>
+                <a href="{{ url_for('events') }}">공연/행사 목록</a>
+            </nav>
 
-    <p>
-        <strong>기간:</strong>
-        {{ event["start_date"] }} ~ {{ event["end_date"] }}
-    </p>
+            <dl class="detail-info">
+                <div class="detail-info-row">
+                    <dt>기간</dt>
+                    <dd>{{ event["start_date"] }} ~ {{ event["end_date"] }}</dd>
+                </div>
+                <div class="detail-info-row">
+                    <dt>지역 / 장소</dt>
+                    <dd>{{ event["region"] }} / {{ event["place"] }}</dd>
+                </div>
+                <div class="detail-info-row">
+                    <dt>주최/주관</dt>
+                    <dd>{{ event["host"] }}</dd>
+                </div>
+                <div class="detail-info-row">
+                    <dt>요금 정보</dt>
+                    <dd>{{ event["fee_info"] }}</dd>
+                </div>
+                <div class="detail-info-row">
+                    <dt>홈페이지</dt>
+                    <dd>
+                        {% if event["homepage"] %}
+                            <a href="{{ event['homepage'] }}" target="_blank">
+                                {{ event["homepage"] }}
+                            </a>
+                        {% else %}
+                            정보 없음
+                        {% endif %}
+                    </dd>
+                </div>
+            </dl>
 
-    <p>
-        <strong>지역 / 장소:</strong>
-        {{ event["region"] }} / {{ event["place"] }}
-    </p>
+            <p class="detail-heart">
+                {% if event["is_favorite"] == 'Y' %}
+                    <a href="{{ url_for('remove_wishlist', event_id=event['event_id']) }}"
+                       class="heart-link">❤️ </a>
+                {% else %}
+                    <a href="{{ url_for('add_wishlist', event_id=event['event_id']) }}"
+                       class="heart-link">🤍 </a>
+                {% endif %}
+            </p>
 
-    {% if event["host"] %}
-    <p>
-        <strong>주최/주관:</strong>
-        {{ event["host"] }}
-    </p>
-    {% endif %}
-
-    {% if event["fee"] %}
-    <p>
-        <strong>요금 정보:</strong>
-        {{ event["fee"] }}
-    </p>
-    {% endif %}
-
-    {% if event["homepage"] %}
-    <p>
-        <strong>홈페이지:</strong>
-        <a href="{{ event['homepage'] }}" target="_blank">
-            {{ event["homepage"] }}
-        </a>
-    </p>
-    {% endif %}
-
-    {% if event["is_favorite"] == 'Y' %}
-    <p>
-        <a href="/wishlist/remove/{{ event['event_id'] }}">
-            ❤️
-        </a>
-    </p>
-    {% else %}
-    <p>
-        <a href="/wishlist/add/{{ event['event_id'] }}">
-            🤍
-        </a>
-    </p>
-    {% endif %}
-
-    <hr>
-
-    <p>
-        <a href="/events">← 공연 목록으로 돌아가기</a>
-    </p>
-    <p>
-        <a href="/wishlist">내 찜 목록 보기</a>
-    </p>
+            <div class="detail-links">
+                <a href="{{ url_for('events') }}" class="btn btn-outline">
+                    ← 공연 목록으로 돌아가기
+                </a>
+                <a href="{{ url_for('wishlist') }}" class="btn btn-outline">
+                    내 찜 목록 보기
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

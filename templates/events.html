@@ -2,74 +2,70 @@
 <head>
     <meta charset="utf-8">
     <title>공연/행사 목록</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 <body>
-    <h1>공연/행사 목록</h1>
-    <nav>
-        <a href="/">홈페이지</a> |
-        <a href="/wishlist">내 찜 목록</a>
-    </nav>
+<div class="main-wrapper">
+        <div class="page-box">
+            <h2>공연/행사 목록</h2>
+            <nav class="top-nav">
+                <a href="{{ url_for('home') }}" class="btn btn-primary">홈으로</a>
+                <a href="{{ url_for('wishlist') }}" class="btn btn-primary">내 위시리스트</a>
+            </nav>
 
-    <!-- 검색 폼 (기간 + 지역) -->
-    <form method="get" action="/events">
-    <label>
-        시작일:
-        <input type="date" name="start_date" value="{{ start_date }}">
-    </label>
-    <label>
-        종료일:
-        <input type="date" name="end_date" value="{{ end_date }}">
-    </label>
-    <label>
-        지역:
-        <select name="region">
-            <option value="">전체</option>
-            {% for r in regions %}
-                <option value="{{ r }}" {% if r == region %}selected{% endif %}>
-                    {{ r }}
-                </option>
-            {% endfor %}
-        </select>
-    </label>
-    <button type="submit">검색</button>
-</form>
+            <form method="get" class="search-form">
+                <label>시작일:
+                    <input type="date" name="start_date" value="{{ start_date }}">
+                </label>
+                <label>종료일:
+                    <input type="date" name="end_date" value="{{ end_date }}">
+                </label>
+                <label>지역:
+                    <select name="region">
+                        <option value="">전체</option>
+                        {% for r in regions %}
+                            <option value="{{ r }}" {% if region == r %}selected{% endif %}>
+                                {{ r }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <button type="submit" class="btn btn-primary">검색</button>
+            </form>
 
-<hr>
+            {% if result_count is defined %}
+                <p>검색 결과: {{ result_count }}건</p>
+            {% endif %}
 
-{% if result_count is not none %}
-    <p>검색 결과: {{ result_count }}건</p>
-{% endif %}
+            {% if events %}
+                <ul class="event-list">
+                    {% for e in events %}
+                        <li class="event-item">
+                            <span class="event-name">
+                                <a href="{{ url_for('event_detail', event_id=e['event_id']) }}">
+                                    {{ e["event_name"] }}
+                                </a>
+                            </span><br>
+                            <span class="event-meta">
+                                {{ e["start_date"] }} ~ {{ e["end_date"] }} |
+                                {{ e["region"] }} / {{ e["place"] }}
+                            </span>
 
-{% if events %}
-    <ul>
-        {% for e in events %}
-            <li>
-                <strong>
-                    <a href="/events/{{ e['event_id'] }}">
-                        {{ e["event_name"] }}
-                    </a>
-                </strong><br>
-                날짜: {{ e["start_date"] }} ~ {{ e["end_date"] }}<br>
-                지역: {{ e["region"] }} / 장소: {{ e["place"] }}<br>
-
-                {% if e["is_favorite"] == 'Y' %}
-                    <a href="/wishlist/remove/{{ e['event_id'] }}">
-                        ❤️
-                    </a>
-                {% else %}
-                    <a href="/wishlist/add/{{ e['event_id'] }}">
-                        🤍
-                    </a>
-                {% endif %}
-            </li>
-            <hr>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>조건에 맞는 공연이 없습니다.</p>
-{% endif %}
-
-
-
+                            {% if e["is_favorite"] == 'Y' %}
+                                <a href="{{ url_for('remove_wishlist', event_id=e['event_id']) }}"
+                                   class="heart-link">❤️</a>
+                            {% else %}
+                                <a href="{{ url_for('add_wishlist', event_id=e['event_id']) }}"
+                                   class="heart-link">🤍</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>조건에 맞는 공연이 없습니다.</p>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>

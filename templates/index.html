@@ -1,23 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="utf-8">
-    <title>전국 공연/행사 위시리스트</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <header>
-        <h1><a href="/" style="text-decoration:none; color:black;">
-            전국 공연/행사 위시리스트
-        </a></h1>
-
-        <nav>
-            <a href="/events">공연/행사 검색</a> |
-            <a href="/wishlist">내 찜 목록</a>
-        </nav>
-
-        <hr>
-    </header>
-
-    <p>전국의 공연/행사를 검색하고, 마음에 드는 공연을 찜 목록에 저장해보세요!</p>
+    <div class="main-wrapper">
+        <div class="page-box">
+            <h2>전국 공연/행사 위시리스트</h2>
+            <p>전국의 공연/행사를 검색하고, 마음에 드는 공연을 찜 목록에 저장해보세요!</p>
+            <p>
+                <a href="/events" class="btn btn-primary">공연/행사 검색하러 가기</a>
+                <a href="/wishlist" class="btn btn-primary">내 위시리스트</a>
+            </p>
+        </div>
+    </div>
 </body>
 </html>

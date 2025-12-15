@@ -1,0 +1,144 @@
+/* 전체 기본 스타일 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+
+/* 상단 헤더와 네비게이션 */
+header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 16px 0;
+    margin-bottom: 24px;
+}
+
+header h1, header h2 {
+    margin: 0;
+    padding: 0;
+}
+
+header a {
+    text-decoration: none;
+    color: #333;
+}
+
+nav {
+    margin-top: 8px;
+    font-size: 0.95rem;
+}
+
+nav a {
+    margin-right: 8px;
+}
+
+/* 페이지 전체 레이아웃 */
+.main-wrapper {
+    max-width: 960px;
+    margin: 0 auto 40px auto;
+    padding: 0 16px;
+    margin-top: 40px;
+}
+
+/* 박스 느낌 */
+.page-box {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px 20px 24px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* 제목들 */
+h2 {
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+/* 검색 폼 영역 */
+.search-form {
+    margin-bottom: 16px;
+    padding: 12px 12px 8px 12px;
+    background-color: #fafafa;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+.search-form label {
+    margin-right: 8px;
+    font-size: 0.9rem;
+}
+
+.search-form input,
+.search-form select {
+    margin-right: 12px;
+    margin-bottom: 8px;
+    padding: 4px 6px;
+    font-size: 0.9rem;
+}
+
+/* 버튼 스타일 */
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: #1976d2;
+    color: #ffffff;
+    border-color: #1565c0;
+}
+
+.btn-outline {
+    background-color: #ffffff;
+    color: #1976d2;
+    border-color: #1976d2;
+}
+
+.btn-danger {
+    background-color: #e53935;
+    color: #ffffff;
+    border-color: #d32f2f;
+}
+
+/* 리스트(목록) */
+.event-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.event-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.event-item:last-child {
+    border-bottom: none;
+}
+
+.event-name {
+    font-weight: 600;
+}
+
+.event-meta {
+    font-size: 0.85rem;
+    color: #666666;
+}
+
+/* 하트 버튼 살짝 여백 */
+.heart-link {
+    margin-left: 6px;
+    font-size: 1.1rem;
+}
+
+/* 위시리스트 안내 문구 등 */
+.notice {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 8px;
+}
