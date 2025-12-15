@@ -38,6 +38,7 @@ def events():
         SELECT DISTINCT region
         FROM Event
         WHERE region != ''
+            AND region NOT IN ('미정', '인처광역시', '충남')
         ORDER BY region
     """)
     region_rows = cur.fetchall()
