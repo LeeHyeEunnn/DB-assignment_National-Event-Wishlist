@@ -142,3 +142,15 @@ h2 {
     color: #666;
     margin-top: 8px;
 }
+
+/* 찜 하트 링크 스타일 */
+.heart-link {
+    text-decoration: none;
+    border-bottom: none;        
+}
+
+.heart-link:hover,
+.heart-link:focus {
+    text-decoration: none;
+    border-bottom: none;
+}
